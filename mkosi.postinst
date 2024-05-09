@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+
+set -exuo pipefail
+
+# Install systemd-boot
+env SYSTEMD_ESP_PATH=/boot \
+    bootctl install --all-architectures --root="${BUILDROOT}" --no-variables
+# Install all kernels
+mkosi-chroot env KERNEL_INSTALL_BYPASS= kernel-install add-all --verbose
+
+# Create user for setup
+useradd -G wheel -U -m --root "${BUILDROOT}" setup
+echo -n "setup" | passwd --root "${BUILDROOT}" -s setup

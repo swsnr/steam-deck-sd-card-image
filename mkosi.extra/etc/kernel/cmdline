@@ -1,0 +1,1 @@
+console=ttyS0 selinux=0 module_blacklist=tpm log_buf_len=4M amd_iommu=off amdgpu.gttsize=8128 spi_amd.speed_dev=1 audit=0 fbcon=rotate:1 systemd.log_level=debug
