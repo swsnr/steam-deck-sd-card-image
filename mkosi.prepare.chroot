@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+set -exuo pipefail
+
+dnf --assumeyes --refresh update --best
+dnf --assumeyes groupupdate core
+dnf --assumeyes groupinstall multimedia
+dnf --assumeyes groupupdate multimedia
+
+dnf --assumeyes install --allowerasing ffmpeg
