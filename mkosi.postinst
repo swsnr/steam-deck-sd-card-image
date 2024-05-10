@@ -2,12 +2,25 @@
 
 set -exuo pipefail
 
-# Install systemd-boot
-env SYSTEMD_ESP_PATH=/boot \
-    bootctl install --all-architectures --root="${BUILDROOT}" --no-variables
-# Install all kernels
-mkosi-chroot env KERNEL_INSTALL_BYPASS= kernel-install add-all --verbose
+# Point systemd-boot to the ESP mountpoint, to override its detection logic,
+# which fails because the ESP partition isn't mounted yet at this point.
+export SYSTEMD_ESP_PATH=/boot
+# Tell 90-loaderentry.install where boot is supposed to be mounted, to make sure
+# it writes correct paths to the entry file
+export BOOT_MNT="${SYSTEMD_ESP_PATH}"
+# Make kernel-install work again.
+# TODO: Remove with mkosi 23, see https://github.com/systemd/mkosi/pull/2539
+export KERNEL_INSTALL_BYPASS=
 
-# Create user for setup
+# Install systemd-boot
+bootctl install --all-architectures --root="${BUILDROOT}" --no-variables
+# Install all kernels
+mkosi-chroot kernel-install add-all --verbose
+
+# Create user for setup with a default password.
+# This user enables us to login graphically for the initial setup, in order to
+# create a homed user with encrypted home directory.
+#
+# After initial setup we can delete this user account.
 useradd -G wheel -U -m setup
 echo -n "setup" | passwd --root="${BUILDROOT}" -s setup
