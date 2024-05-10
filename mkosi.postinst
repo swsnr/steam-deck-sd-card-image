@@ -9,5 +9,5 @@ env SYSTEMD_ESP_PATH=/boot \
 mkosi-chroot env KERNEL_INSTALL_BYPASS= kernel-install add-all --verbose
 
 # Create user for setup
-useradd -G wheel -U -m --root "${BUILDROOT}" setup
-echo -n "setup" | passwd --root "${BUILDROOT}" -s setup
+useradd -G wheel -U -m setup
+echo -n "setup" | passwd --root="${BUILDROOT}" -s setup
