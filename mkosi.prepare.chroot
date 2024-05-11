@@ -8,3 +8,6 @@ dnf --assumeyes groupinstall multimedia
 dnf --assumeyes groupupdate multimedia
 
 dnf --assumeyes install --allowerasing ffmpeg
+
+# Enable homed for user management
+authselect enable-feature with-systemd-homed
